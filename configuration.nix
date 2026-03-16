@@ -91,6 +91,21 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Enable automatic garbage collection and store optimization
+  nix.gc = {
+    automatic = true;
+    dates = "18:00"; # Run garbage collection daily at 6 PM
+    options = "--delete-older-than 7d"; # Delete generations older than 7 days
+  };
+
+  nix.optimise = {
+    automatic = true;
+    dates = [ "18:00" ]; # Optimize the store daily at 6 PM
+  };
+
+
+
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
