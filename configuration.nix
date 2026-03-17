@@ -1,81 +1,76 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [ ./hardware-configuration.nix ];
 
-  # Bootloader - GRUB for dual boot with Windows
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "nodev";
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.useOSProber = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot";
-
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Enable networking
-  networking.networkmanager.enable = true;
-
-  # Set your time zone.
-  time.timeZone = "Asia/Kolkata";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_IN";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_IN";
-    LC_IDENTIFICATION = "en_IN";
-    LC_MEASUREMENT = "en_IN";
-    LC_MONETARY = "en_IN";
-    LC_NAME = "en_IN";
-    LC_NUMERIC = "en_IN";
-    LC_PAPER = "en_IN";
-    LC_TELEPHONE = "en_IN";
-    LC_TIME = "en_IN";
+  # Boot
+  boot.loader.grub = {
+    enable = true;
+    device = "nodev";
+    efiSupport = true;
+    useOSProber = true;
+  };
+  boot.loader.efi = {
+    canTouchEfiVariables = true;
+    efiSysMountPoint = "/boot";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  # Networking
+  networking = {
+    hostName = "thinkpad-E14";
+    networkmanager.enable = true;
+  };
 
-  # Enable the GNOME Desktop Environment.
+  # i18n
+  time.timeZone = "Asia/Kolkata";
+  i18n = {
+    defaultLocale = "en_IN";
+    extraLocaleSettings = {
+      LC_ADDRESS = "en_IN";
+      LC_IDENTIFICATION = "en_IN";
+      LC_MEASUREMENT = "en_IN";
+      LC_MONETARY = "en_IN";
+      LC_NAME = "en_IN";
+      LC_NUMERIC = "en_IN";
+      LC_PAPER = "en_IN";
+      LC_TELEPHONE = "en_IN";
+      LC_TIME = "en_IN";
+    };
+  };
+
+  # X11 & GNOME
+  services.xserver = {
+    enable = true;
+    xkb = { layout = "us"; variant = ""; };
+  };
+
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
 
   environment.gnome.excludePackages = with pkgs; [
-    gnome-tour
-    gnome-characters
-    gnome-maps
-    gnome-weather
-    epiphany
-    cheese
-    simple-scan
-    brasero
-    gnome-logs
-    gnome-contacts
-    gnome-connections
-    gnome-music
-    gnome-user-docs
-    yelp
+    gnome-tour gnome-characters gnome-maps gnome-weather epiphany
+    cheese simple-scan brasero gnome-logs gnome-contacts
+    gnome-connections gnome-music gnome-user-docs yelp
   ];
 
-  # Enable TLP for power saving
-  services.tlp.enable = true;
+  # Power Management
+  services.tlp = {
+    enable = true;
+    settings = {
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+      CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
+      START_CHARGE_THRESH_BAT0 = 40;
+      STOP_CHARGE_THRESH_BAT0 = 80;
+      WIFI_PWR_ON_BAT = 0;
+      BLUETOOTH_PWR_ON_BAT = 0;
+    };
+  };
   services.power-profiles-daemon.enable = false;
   services.thermald.enable = true;
 
-  # Disable microphone LED (known ThinkPad bug)
+  # Microphone LED fix (ThinkPad)
   systemd.services.disable-mic-led = {
     description = "Disable microphone LED";
     serviceConfig = {
@@ -90,144 +85,87 @@
     ACTION=="add", SUBSYSTEM=="leds", KERNEL=="platform::micmute", RUN+="${pkgs.bash}/bin/bash -c 'echo 0 > /sys/class/leds/platform::micmute/brightness || true'"
   '';
 
-  services.tlp.settings = {
-    CPU_SCALING_GOVERNOR_ON_AC = "performance";
-    CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-    CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
-    CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-    START_CHARGE_THRESH_BAT0 = 40;
-    STOP_CHARGE_THRESH_BAT0 = 80;
-    WIFI_PWR_ON_BAT = 0;
-    BLUETOOTH_PWR_ON_BAT = 0;
+  # Audio
+  services = {
+    pulseaudio.enable = false;
+    pipewire = {
+      enable = true;
+      alsa = { enable = true; support32Bit = true; };
+      pulse.enable = true;
+    };
   };
-
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
-
-  # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
-  };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # User
   users.users.aryan = {
     isNormalUser = true;
     description = "Aryan";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
   };
 
-  # Install firefox.
-  programs.firefox.enable = true;
+  # Programs
+  programs.nix-ld.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryPackage = pkgs.pinentry-gnome3;
+    enableSSHSupport = true;
+  };
 
-  # Docker - Rootless
+  sops = {
+    defaultSopsFile = ./secrets.yaml;
+    age.keyFile = "/home/aryan/.config/sops/age/keys.txt";
+  };
+
+  # Docker
   virtualisation.docker = {
     enable = true;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
+    rootless = { enable = true; setSocketVariable = true; };
     storageDriver = "overlay2";
     autoPrune.enable = true;
     autoPrune.dates = "weekly";
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.vivaldi = {
-    proprietaryCodecs = true;
-    enableWideVine = true;
+  # Nix
+  nixpkgs.config = {
+    allowUnfree = true;
+    vivaldi = { proprietaryCodecs = true; enableWideVine = true; };
   };
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.substituters = ["https://nix-community.cachix.org"];
-  nix.settings.trusted-public-keys = ["nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="];
-  # Enable automatic garbage collection and store optimization
-  nix.gc = {
-    automatic = true;
-    dates = "18:00"; # Run garbage collection daily at 6 PM
-    options = "--delete-older-than 7d"; # Delete generations older than 7 days
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    substituters = [ "https://nix-community.cachix.org" ];
+    trusted-public-keys = [ "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
+    max-jobs = "auto";
+    keep-outputs = false;
+    keep-derivations = false;
   };
-
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 7d --keep 3";
+    flake = "/home/aryan/nixos-config";
+  };
   nix.optimise = {
     automatic = true;
-    dates = [ "18:00" ]; # Optimize the store daily at 6 PM
+    dates = [ "18:00" ];
   };
 
-  # Reduce disk usage
-  nix.settings.max-jobs = "auto"; # Build packages in parallel
-  nix.settings.keep-outputs = false; # Don't keep build outputs
-  nix.settings.keep-derivations = false; # Don't keep derivations after build
-
-  # Graphics and HDMI
-  hardware.graphics.enable = true;
-  hardware.graphics.enable32Bit = true;
-
-  # Bluetooth - off by default
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = false;
-  hardware.bluetooth.settings = {
-    General = {
-      AutoEnable = false;
+  # Hardware
+  services.fstrim.enable = true;
+  hardware = {
+    cpu.amd.updateMicrocode = true;
+    graphics = { enable = true; enable32Bit = true; };
+    bluetooth = {
+      enable = true;
+      powerOnBoot = false;
+      settings.General.AutoEnable = false;
     };
   };
 
-
-
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # System Packages
   environment.systemPackages = with pkgs; [
-   wget
-   aria2
-   git
-   ffmpeg
-   nil
+    wget aria2 git ffmpeg nil
+    libgda5 gsound gnomeExtensions.pano
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.11"; # Did you read the comment?
-
+  system.stateVersion = "25.11";
 }
