@@ -33,9 +33,9 @@
     gnomeExtensions.caffeine
     gnomeExtensions.alphabetical-app-grid
   ]) ++
-  (with zen-browser.packages.x86_64-linux; [
-    zen-browser
-  ]);
+  [
+    zen-browser.packages.x86_64-linux.default
+  ];
 
   dconf.settings = {
     "org/gnome/shell" = {
@@ -44,6 +44,7 @@
         "alphabetical-app-grid@stuarthayhurst.shell-extension"
       ];
       favorite-apps = [
+        "zen.desktop"
         "vivaldi-stable.desktop"
         "org.gnome.Nautilus.desktop"
         "firefox.desktop"
