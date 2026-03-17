@@ -59,6 +59,28 @@
 
   fonts.fontconfig.enable = true;
 
+  programs.firefox = {
+    enable = true;
+    profiles.default = {
+      settings = {
+        "browser.cache.memory.enable" = true;
+        "browser.cache.memory.max" = 512000;
+        "browser.sessionstore.interval" = 300000;
+        "browser.sessionstore.max_tabs_undo" = 0;
+        "toolkit.storage.database.eagerVacuum" = false;
+      };
+    };
+  };
+
+  programs.vivaldi = {
+    enable = true;
+    commandLineArgs = [
+      "--disk-cache-size=0"
+      "--disk-cache-size=0"
+      "--media-cache-size=1048576"
+    ];
+  };
+
   programs.bash.enable = true;
   programs.bash.shellAliases = {
     rebuild = "sudo nixos-rebuild switch --flake /home/aryan/nixos-config#nixos";
