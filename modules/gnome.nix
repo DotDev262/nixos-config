@@ -36,6 +36,17 @@
     "org/gnome/shell/extensions/caffeine" = {
       show-notifications = true;
     };
+    "org/gnome/desktop/wm/keybindings" = {
+      close = [ "<Super>q" ];
+    };
+    "org/gnome/settings-daemon/plugins/media-keys" = {
+      custom-keybindings = [ "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/" ];
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+      binding = "<Super>t";
+      command = "kgx";
+      name = "Open Terminal";
+    };
   };
 
   home.packages = with pkgs; [

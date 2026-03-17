@@ -63,5 +63,10 @@
         ];
       };
     };
+
+    templates.microvm = {
+      path = ./templates/microvm;
+      description = "A lightweight NixOS MicroVM template";
+    };
   };
 }

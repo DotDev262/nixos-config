@@ -98,6 +98,14 @@
     initExtra = ''
       # Initialize zoxide
       eval "$(zoxide init bash)"
+
+      # Use gpg-agent for SSH
+      export GPG_TTY=$(tty)
+      export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+      gpgconf --launch gpg-agent
+
+      # Nix Helper flake path
+      export NH_FLAKE="/home/aryan/nixos-config"
     '';
     shellAliases = {
       rebuild = "nh os switch";
@@ -125,5 +133,8 @@
     comma
     dust
     alejandra
+    pre-commit
+    devenv
+    opencode
   ];
 }
