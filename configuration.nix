@@ -63,10 +63,15 @@
     description = "Disable microphone LED";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.coreutils}/bin/sh -c 'echo 0 > /sys/class/leds/platform::micmute/brightness'";
+      ExecStart = "${pkgs.bash}/bin/bash -c 'echo 0 > /sys/class/leds/platform::micmute/brightness || true'";
     };
     wantedBy = [ "multi-user.target" ];
+    after = [ "systemd-logind.service" ];
   };
+
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="leds", KERNEL=="platform::micmute", RUN+="${pkgs.bash}/bin/bash -c 'echo 0 > /sys/class/leds/platform::micmute/brightness || true'"
+  '';
 
   services.tlp.settings = {
     CPU_SCALING_GOVERNOR_ON_AC = "performance";
