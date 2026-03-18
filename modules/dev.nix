@@ -17,7 +17,10 @@
     package = pkgs.vscode;
     mutableExtensionsDir = false;
     profiles.default = {
-      extensions = [ ];
+      extensions = with pkgs.vscode-marketplace; [
+        eamodio.gitlens
+        christian-kohler.path-intellisense
+      ];
       userSettings = {
         "editor.formatOnSave" = true;
         "editor.cursorBlinking" = "phase";
@@ -59,12 +62,21 @@
       init.defaultBranch = "main";
       user.name = "DotDev262";
       user.email = "dotdev262@gmail.com";
-      credential.helper = "store";
+      credential.helper = "libsecret";
       commit.gpgsign = true;
     };
     includes = [
       { path = "~/.config/git/signing_key"; }
     ];
+  };
+
+  programs.starship = {
+    enable = true;
+    enableBashIntegration = true;
+    settings = {
+      add_newline = false;
+      format = "$all";
+    };
   };
 
   programs.gpg.enable = true;

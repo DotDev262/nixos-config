@@ -210,6 +210,7 @@
   };
   programs.ccache.enable = true;
   services.fwupd.enable = true;
+  services.irqbalance.enable = true;
 
   # Hardware
   services.fstrim.enable = true;
