@@ -15,6 +15,15 @@ Your NixOS configuration includes specialized optimizations for your Lenovo Thin
     - **Thermald**: Configured for cooling management.
     - **Microphone LED**: Specialized `udev` fix for the ThinkPad microphone LED.
 
+## **Biometric Authentication**
+- **FPC Fingerprint Sensor (10a5:9800)**: Specialized support for the Goodix/FPC fingerprint sensor found on the ThinkPad E14.
+    - **Proprietary Driver**: Integrated the `libfpcbep.so` driver from Lenovo's official firmware (`r1slm02w.zip`).
+    - **Libfprint Patching**: Custom build of `libfprint` with the `fpcmoh` driver patch and TEE database fixes.
+    - **Power Management**: Explicitly disabled USB autosuspend for the sensor (10a5:9800) in TLP to prevent "verify-no-match" issues and internal database resets.
+    - **Polkit & PAM**: 
+        - Configured `fprintAuth` for all critical PAM services (sudo, login, gdm, etc.).
+        - Added custom Polkit rules to allow users in the `wheel` group to manage fingerprints without a password prompt, ensuring the menu appears in GNOME Settings.
+
 ---
 
 ## **SSD Optimization**
