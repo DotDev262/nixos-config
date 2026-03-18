@@ -25,9 +25,9 @@
 
   sops = {
     defaultSopsFile = ./secrets.yaml;
-    age.keyFile = "/home/aryan/.config/sops/age/keys.txt";
+    age.keyFile = "${homeDirectory}/.config/sops/age/keys.txt";
     secrets.gpg_key = { 
-      path = "/home/aryan/.config/git/signing_key";
+      path = "${homeDirectory}/.config/git/signing_key";
     };
   };
 

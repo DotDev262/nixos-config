@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, username, homeDirectory, ... }:
 
 {
   imports = [ 
@@ -189,7 +189,7 @@
     enable = true;
     clean.enable = true;
     clean.extraArgs = "--keep 3 --keep-since 7d";
-    flake = "/home/aryan/nixos-config";
+    flake = "${homeDirectory}/nixos-config";
   };
   nix.optimise = {
     automatic = true;
