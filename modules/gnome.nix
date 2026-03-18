@@ -52,6 +52,16 @@
     };
   };
 
+  # Portability: Manually link extensions so they work on non-NixOS distros
+  home.file = {
+    ".local/share/gnome-shell/extensions/caffeine@patapon.info".source = 
+      "${pkgs.gnomeExtensions.caffeine}/share/gnome-shell/extensions/caffeine@patapon.info";
+    ".local/share/gnome-shell/extensions/alphabetical-app-grid@stuarthayhurst.shell-extension".source = 
+      "${pkgs.gnomeExtensions.alphabetical-app-grid}/share/gnome-shell/extensions/alphabetical-app-grid@stuarthayhurst.shell-extension";
+    ".local/share/gnome-shell/extensions/pano@alperen.elhan".source = 
+      "${pkgs.gnomeExtensions.pano}/share/gnome-shell/extensions/pano@alperen.elhan";
+  };
+
   home.packages = with pkgs; [
     gnomeExtensions.caffeine
     gnomeExtensions.alphabetical-app-grid

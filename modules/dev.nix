@@ -117,7 +117,7 @@
       gpgconf --launch gpg-agent
 
       # Nix Helper flake path
-      export NH_FLAKE="/home/aryan/nixos-config"
+      export NH_FLAKE="${config.home.homeDirectory}/nixos-config"
     '';
     shellAliases = {
       rebuild = "nh os switch";
@@ -126,6 +126,7 @@
   };
 
   home.packages = with pkgs; [
+    libsecret
     nil
     git
     gh
