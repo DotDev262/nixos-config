@@ -1,7 +1,10 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [ 
+    ./hardware-configuration.nix
+    ./modules/fprint/fprintd.nix
+  ];
 
   # Boot
   boot.loader.grub = {
@@ -138,7 +141,7 @@
   users.users.aryan = {
     isNormalUser = true;
     description = "Aryan";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "input" ];
   };
 
   # Programs
@@ -237,6 +240,7 @@
   environment.systemPackages = with pkgs; [
     wget aria2 git ffmpeg nil
     libgda5 gsound gnomeExtensions.pano
+    fprintd
   ];
 
   system.stateVersion = "25.11";

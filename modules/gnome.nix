@@ -2,6 +2,9 @@
 
 {
   dconf.settings = {
+    "org/gnome/login-screen" = {
+      enable-fingerprint-authentication = true;
+    };
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
       show-battery-percentage = true;
