@@ -12,6 +12,7 @@
     device = "nodev";
     efiSupport = true;
     useOSProber = true;
+    configurationLimit = 10;
   };
   boot.loader.efi = {
     canTouchEfiVariables = true;
@@ -136,6 +137,10 @@
     };
   };
   security.rtkit.enable = true;
+  security.polkit.enable = true;
+  security.protectKernelImage = true;
+  security.unprivilegedUsernsClone = true;
+  security.allowUserNamespaces = true;
 
   # User
   users.users.aryan = {
@@ -179,11 +184,6 @@
     keep-outputs = false;
     keep-derivations = false;
     extra-sandbox-paths = [ config.programs.ccache.cacheDir ];
-  };
-  nix.gc = {
-    automatic = false;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
   };
   programs.nh = {
     enable = true;
