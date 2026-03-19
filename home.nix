@@ -46,11 +46,11 @@
     enable = true;
     shellAliases = {
       hms = "cd /home/aryan/nixos-config && $HOME/.nix-profile/bin/home-manager switch --flake .#aryan -b backup";
-      yay = "PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin /usr/bin/yay $argv";
-      paru = "PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin /usr/bin/paru $argv";
     };
     functions = {
       sudopath = "sudo env \"PATH=$PATH\" $argv";
+      yay = "PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin /usr/bin/yay $argv";
+      paru = "PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin /usr/bin/paru $argv";
     };
     interactiveShellInit = ''
       set -g fish_greeting
