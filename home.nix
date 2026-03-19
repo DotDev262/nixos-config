@@ -40,15 +40,14 @@
   home.file.".config/hypr/custom/env.conf".text = ''
     env = PATH,"${homeDirectory}/.nix-profile/bin:${homeDirectory}/.local/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin"
     env = XDG_DATA_DIRS,"${homeDirectory}/.local/share:${homeDirectory}/.local/state/home-manager/profiles/1/share:${homeDirectory}/.nix-profile/share:$XDG_DATA_DIRS"
-    env = TERMINAL,"kitty"
   '';
 
   programs.fish = {
     enable = true;
     shellAliases = {
       hms = "cd /home/aryan/nixos-config && $HOME/.nix-profile/bin/home-manager switch --flake .#aryan -b backup";
-      yay = "env -i HOME=$HOME TERM=$TERM /usr/bin/yay $argv";
-      paru = "env -i HOME=$HOME TERM=$TERM /usr/bin/paru $argv";
+      yay = "PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin /usr/bin/yay $argv";
+      paru = "PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin /usr/bin/paru $argv";
     };
     functions = {
       sudopath = "sudo env \"PATH=$PATH\" $argv";
@@ -63,8 +62,8 @@
 
   programs.bash.shellAliases = {
     hms = "home-manager switch -b backup";
-    yay = "env -i HOME=$HOME TERM=$TERM /usr/bin/yay \"$@\"";
-    paru = "env -i HOME=$HOME TERM=$TERM /usr/bin/paru \"$@\"";
+    yay = "PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin /usr/bin/yay \"$@\"";
+    paru = "PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin /usr/bin/paru \"$@\"";
   };
 
   fonts.fontconfig.enable = true;
