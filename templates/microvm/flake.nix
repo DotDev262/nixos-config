@@ -6,7 +6,7 @@
 
   outputs = { self, nixpkgs, microvm }: {
     nixosConfigurations.microvm = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
+      pkgs = import nixpkgs { localSystem = "x86_64-linux"; };
       modules = [
         microvm.nixosModules.microvm
         {

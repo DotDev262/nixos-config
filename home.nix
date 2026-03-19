@@ -25,14 +25,15 @@
 
   home.sessionPath = [ "$HOME/.local/bin" ];
 
-  programs.fish.enable = true;
-
-  programs.fish.shellAliases = {
-    hms = "cd /home/aryan/nixos-config && $HOME/.nix-profile/bin/home-manager switch --flake .#aryan -b backup";
-  };
-
-  programs.fish.functions = {
-    sudopath = "sudo env \"PATH=$PATH\" $argv";
+  programs.fish = {
+    enable = true;
+    interactiveShellInit = "set -g fish_greeting";
+    shellAliases = {
+      hms = "cd /home/aryan/nixos-config && $HOME/.nix-profile/bin/home-manager switch --flake .#aryan -b backup";
+    };
+    functions = {
+      sudopath = "sudo env \"PATH=$PATH\" $argv";
+    };
   };
 
   programs.bash.shellAliases = {
