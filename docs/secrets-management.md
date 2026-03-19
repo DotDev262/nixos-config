@@ -1,45 +1,59 @@
-# Secrets Management with sops-nix
+# Secrets Management with agenix
 
-This document explains how to securely handle sensitive information like GPG key IDs using `sops-nix`, Age, and GPG.
+This document explains how to securely handle sensitive information using `agenix`, Age, and your SSH keys.
 
 ## **Overview**
-- **`sops-nix`**: A tool for managing secrets in NixOS configurations, allowing you to encrypt and decrypt secrets on the fly.
-- **Age**: A modern encryption tool used by `sops` for secure secret handling.
-- **GPG**: Used for signing commits and securing sensitive data.
+- **`agenix`**: A tool for managing secrets in NixOS and Home Manager configurations, allowing you to encrypt secrets with public keys and decrypt them with private keys (like SSH).
+- **Age**: A modern encryption tool used by `agenix` for secure secret handling.
 
 ---
 
 ## **Key Management**
-- **SSH Key to Age Key**: Your SSH key (`~/.ssh/id_ed25519`) is converted to an Age key for secure secret encryption.
-- **Age Private Key**: Stored at `~/.config/sops/age/keys.txt`. This is your "Master Key"—never share it or commit it.
-- **Age Public Key**: Used in `.sops.yaml` to define encryption rules for your secrets.
+- **SSH Key to Age**: Your standard SSH key (`~/.ssh/id_ed25519`) is used directly by `agenix` for decryption.
+- **Identity Paths**: Configured in `secrets.nix`, `age.identityPaths` tells `agenix` which private keys to use for decryption.
 
 ---
 
 ## **Secret Storage**
-- **`secrets.yaml`**: The encrypted secret store. All sensitive data should be stored here.
-- **`.sops.yaml`**: Defines encryption rules using your Age public key.
+- **`secrets/`**: The directory where your encrypted `.age` files are stored.
+- **`secrets/secrets.nix`**: The master configuration file for `agenix` that maps public keys to secret files.
 
 ---
 
 ## **Workflow**
-1.  **Generate Age Private Key**:
-    ```bash
-    mkdir -p ~/.config/sops/age
-    nix-shell -p ssh-to-age --run "ssh-to-age -private-key -i ~/.ssh/id_ed25519 > ~/.config/sops/age/keys.txt"
-    ```
-2.  **Encrypt/Edit Secrets**:
-    ```bash
-    nix-shell -p sops --run "sops secrets.yaml"
-    ```
-    This will open the file in your default editor. After saving, it will automatically be encrypted.
-3.  **Reference Secrets in Nix**:
-    Use `config.sops.secrets.gpg_key.path` to access the decrypted value in your configuration.
+
+### 1. **Prepare the `secrets/secrets.nix` file**
+Define which public keys can decrypt which secrets:
+```nix
+let
+  user = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI..."; # Your public SSH key
+  system = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI..."; # Your system's SSH host key
+in
+{
+  "example.age".publicKeys = [ user system ];
+}
+```
+
+### 2. **Encrypt/Edit Secrets**
+Use the `agenix` CLI to create or edit secrets:
+```bash
+# Navigate to the secrets directory
+cd secrets
+# Edit or create a secret
+agenix -e example.age
+```
+This will open the file in your default editor. After saving, it will be automatically encrypted using the public keys defined in `secrets/secrets.nix`.
+
+### 3. **Reference Secrets in Nix**
+In your `secrets.nix` (Home Manager) or system configuration:
+```nix
+age.secrets.example.file = ./secrets/example.age;
+```
+The secret will be decrypted to a path (usually `/run/user/$UID/agenix/example` for Home Manager) and can be accessed via `config.age.secrets.example.path`.
 
 ---
 
 ## **Best Practices**
-- **Never Commit Private Keys**: Always keep your Age private key secure and off Git.
-- **Always Commit Encrypted Secrets**: `secrets.yaml` and `.sops.yaml` should be committed to Git.
-- **Verify Encryption**: Before staging `secrets.yaml`, ensure you see the `ENC[AES256_GCM,...]` tags.
-- **Use GPG for Commit Signing**: Your GPG key ID is securely managed by `sops-nix` and automatically integrated into your Git configuration.
+- **Never Commit Private Keys**: Always keep your SSH private key secure and off Git.
+- **Always Commit Encrypted Secrets**: `.age` files and `secrets/secrets.nix` should be committed to Git.
+- **Update Public Keys**: If you change your SSH key, update the public keys in `secrets/secrets.nix` and re-encrypt the secrets.

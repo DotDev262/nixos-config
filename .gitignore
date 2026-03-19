@@ -1,0 +1,4 @@
+# Ignore secrets by default but allow encrypted files and configuration
+# secrets/
+!secrets/*.age
+!secrets/secrets.nix

@@ -62,12 +62,10 @@
       init.defaultBranch = "main";
       user.name = "DotDev262";
       user.email = "dotdev262@gmail.com";
+      user.signingkey = "1C3896781C75E5AD";
       credential.helper = "libsecret";
       commit.gpgsign = true;
     };
-    includes = [
-      { path = "~/.config/git/signing_key"; }
-    ];
   };
 
   programs.starship = {

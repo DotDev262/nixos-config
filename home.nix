@@ -23,12 +23,20 @@
 
   programs.home-manager.enable = true;
 
-  sops = {
-    defaultSopsFile = ./secrets.yaml;
-    age.keyFile = "${homeDirectory}/.config/sops/age/keys.txt";
-    secrets.gpg_key = { 
-      path = "${homeDirectory}/.config/git/signing_key";
-    };
+  home.sessionPath = [ "$HOME/.local/bin" ];
+
+  programs.fish.enable = true;
+
+  programs.fish.shellAliases = {
+    hms = "cd /home/aryan/nixos-config && $HOME/.nix-profile/bin/home-manager switch --flake .#aryan -b backup";
+  };
+
+  programs.fish.functions = {
+    sudopath = "sudo env \"PATH=$PATH\" $argv";
+  };
+
+  programs.bash.shellAliases = {
+    hms = "home-manager switch -b backup";
   };
 
   fonts.fontconfig.enable = true;

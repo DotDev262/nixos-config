@@ -19,51 +19,49 @@
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
+    agenix = {
+      url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, zen-browser, catppuccin, nix-vscode-extensions, sops-nix, ... }: 
+  outputs = { self, nixpkgs, home-manager, zen-browser, catppuccin, nix-vscode-extensions, agenix, ... }: 
   let
     system = "x86_64-linux";
     username = "aryan";
     homeDirectory = "/home/aryan";
     pkgs = import nixpkgs {
-      inherit system;
+      localSystem = system;
       overlays = [ nix-vscode-extensions.overlays.default ];
     };
   in {
     nixosConfigurations = {
       thinkpad-E14 = nixpkgs.lib.nixosSystem {
-        inherit system;
+        inherit pkgs;
         specialArgs = {
           inherit self;
-          inherit sops-nix;
           inherit username homeDirectory;
         };
         modules = [
           ./configuration.nix
-          ./hardware-configuration.nix
-          sops-nix.nixosModules.sops
         ];
       };
     };
 
     homeConfigurations = {
       "${username}" = home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgs;
+        inherit pkgs;
         extraSpecialArgs = {
           inherit self;
           inherit zen-browser;
-          inherit sops-nix;
           inherit username homeDirectory;
+          inherit agenix;
         };
         modules = [ 
           ./home.nix 
           catppuccin.homeModules.catppuccin
-          sops-nix.homeManagerModules.sops
+          agenix.homeManagerModules.default
+          ./secrets.nix
         ];
       };
     };

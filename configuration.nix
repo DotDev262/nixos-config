@@ -158,11 +158,6 @@
     enableSSHSupport = true;
   };
 
-  sops = {
-    defaultSopsFile = ./secrets.yaml;
-    age.keyFile = "/home/aryan/.config/sops/age/keys.txt";
-  };
-
   # Docker
   virtualisation.docker = {
     enable = true;
@@ -179,8 +174,16 @@
   };
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
-    substituters = [ "https://nix-community.cachix.org" ];
-    trusted-public-keys = [ "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=" ];
+    substituters = [
+      "https://nix-community.cachix.org"
+      "https://cache.nixos.org"
+      "https://cs.tweag.io"
+    ];
+    trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "cs.tweag.io-0:5nRo2D0OnxnqjMTQRi+zMaVtBkegk/iP4r+eIEA9W/s="
+    ];
     max-jobs = "auto";
     keep-outputs = false;
     keep-derivations = false;
