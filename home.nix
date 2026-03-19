@@ -45,6 +45,8 @@
     enable = true;
     shellAliases = {
       hms = "cd /home/aryan/nixos-config && $HOME/.nix-profile/bin/home-manager switch --flake .#aryan -b backup";
+      yay = "env -i HOME=$HOME TERM=$TERM /usr/bin/yay $argv";
+      paru = "env -i HOME=$HOME TERM=$TERM /usr/bin/paru $argv";
     };
     functions = {
       sudopath = "sudo env \"PATH=$PATH\" $argv";
@@ -59,6 +61,8 @@
 
   programs.bash.shellAliases = {
     hms = "home-manager switch -b backup";
+    yay = "env -i HOME=$HOME TERM=$TERM /usr/bin/yay \"$@\"";
+    paru = "env -i HOME=$HOME TERM=$TERM /usr/bin/paru \"$@\"";
   };
 
   fonts.fontconfig.enable = true;
