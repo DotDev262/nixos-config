@@ -51,6 +51,27 @@ age.secrets.example.file = ./secrets/example.age;
 ```
 The secret will be decrypted to a path (usually `/run/user/$UID/agenix/example` for Home Manager) and can be accessed via `config.age.secrets.example.path`.
 
+## **Accessing Secrets at Runtime**
+Secrets are decrypted by agenix to `/run/user/$UID/agenix/<secret-name>` and can be sourced by your shell:
+
+### **Fish Shell**
+Automatically sources `GH_TOKEN` if the secret exists:
+```fish
+if test -f /run/user/(id -u)/agenix/gh-token
+  set -gx GH_TOKEN (cat /run/user/(id -u)/agenix/gh-token)
+end
+```
+
+### **Bash/Zsh**
+Add to your shell init:
+```bash
+if [ -f "/run/user/$(id -u)/agenix/gh-token" ]; then
+  export GH_TOKEN=$(cat "/run/user/$(id -u)/agenix/gh-token")
+fi
+```
+
+The `GH_TOKEN_FILE` session variable is also set to `${HOME}/.config/gh-token` for tools that expect a file path.
+
 ---
 
 ## **Best Practices**
