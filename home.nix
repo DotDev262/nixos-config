@@ -30,6 +30,19 @@
 
   xdg.enable = true;
 
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = "zen.desktop";
+      "x-scheme-handler/http" = "zen.desktop";
+      "x-scheme-handler/https" = "zen.desktop";
+      "application/pdf" = "org.gnome.Papers.desktop";
+    };
+  };
+
+  # Ensure services are started/restarted on activation
+  systemd.user.startServices = "sd-switch";
+
   home.sessionVariables = {
     ANI_CLI_PLAYER = "mpv";
     ANI_CLI_SKIP_INTRO = "1";
@@ -65,6 +78,7 @@
     enable = true;
     shellAliases = {
       hms = "cd /home/aryan/nixos-config && $HOME/.nix-profile/bin/home-manager switch --flake .#aryan -b backup";
+      hmn = "home-manager news --flake /home/aryan/nixos-config#aryan";
       zen = "nixGLIntel zen";
       vivaldi = "nixGLIntel vivaldi";
     };
@@ -81,6 +95,7 @@
 
   programs.bash.shellAliases = {
     hms = "home-manager switch -b backup";
+    hmn = "home-manager news --flake /home/aryan/nixos-config#aryan";
     zen = "nixGLIntel zen";
     vivaldi = "nixGLIntel vivaldi";
   };
@@ -113,6 +128,10 @@
       done
       
       $DRY_RUN_CMD ln -sf ${homeDirectory}/.nix-profile/lib/libffmpeg.so ${homeDirectory}/.local/lib/vivaldi/media-codecs-120726/libffmpeg.so
+      
+      # Symlink Arch system fonts so Nix apps can discover them
+      $DRY_RUN_CMD mkdir -p ${homeDirectory}/.local/share/fonts
+      $DRY_RUN_CMD ln -sf /usr/share/fonts ${homeDirectory}/.local/share/fonts/arch-fonts
     '';
   };
 }
