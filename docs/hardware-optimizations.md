@@ -2,18 +2,16 @@
 
 Your NixOS configuration includes specialized optimizations for your Lenovo ThinkPad E14 (AMD Gen 5), improving performance, stability, and power management.
 
-## **AMD Optimizations**
-- **`hardware.cpu.amd.updateMicrocode`**: Ensures your AMD CPU receives the latest microcode updates for stability and performance.
-- **Power Management**: 
-    - **TLP**: Custom settings for aggressive power-saving on battery, including:
-        - Disabled CPU boost on battery.
-        - `low-power` platform profile on battery.
-        - PCIe ASPM set to `powersave`.
-        - `auto` runtime power management.
-        - WiFi and Bluetooth power saving enabled.
-    - **Powertop**: Automatic tuning enabled for low-level optimizations.
-    - **Thermald**: Configured for cooling management.
-    - **Microphone LED**: Specialized `udev` fix for the ThinkPad microphone LED.
+## **AMD & Power Optimizations**
+- **`amd_pstate_epp` (Active Mode)**: The most modern scaling driver for Zen 3/4 processors.
+- **TLP Custom Configuration**: Optimized for the Ryzen 5 7530U to ensure maximum battery life:
+    - **`EPP = power`**: Forced most aggressive power-saving state on battery.
+    - **`CPU_BOOST = 0`**: Disabled boost on battery to prevent power spikes.
+    - **`MIN_FREQ = 410MHz`**: Allows the CPU to downclock fully.
+    - **`PLATFORM_PROFILE = low-power`**: Firmware-level power saving for ThinkPads.
+- **`optimize-power.sh`**: A specialized bash script to automate TLP setup, mask conflicting services (like `power-profiles-daemon`), and apply CachyOS-specific kernel parameters like **Lazy RCU** (`rcutree.enable_rcu_lazy=1`).
+- **Powertop Auto-Tune**: Integrated as a systemd service to handle low-level PCIe, USB, and SATA power states.
+- **Microphone LED**: Specialized `udev` fix for the ThinkPad microphone LED.
 
 ## **Biometric Authentication**
 - **FPC Fingerprint Sensor (10a5:9800)**: Specialized support for the Goodix/FPC fingerprint sensor found on the ThinkPad E14.
