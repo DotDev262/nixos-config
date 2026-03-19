@@ -151,5 +151,6 @@
     pre-commit
     devenv
     opencode
+    xdg-terminal
   ];
 }
