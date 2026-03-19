@@ -4,4 +4,5 @@ let
 in
 {
   "gpg-key.age".publicKeys = [ user ];
+  "gh-token.age".publicKeys = [ user ];
 }
