@@ -4,7 +4,8 @@
   programs.fish = {
     enable = true;
     shellAliases = {
-      hms = "cd /home/aryan/nixos-config && $HOME/.nix-profile/bin/home-manager switch --flake .#aryan -b backup";
+      hm = "cd /home/aryan/nixos-config && $HOME/.nix-profile/bin/home-manager switch --flake .#aryan -b backup";
+    hms = "cd /home/aryan/nixos-config && nh home switch --backup-extension backup";
       hmn = "home-manager news --flake /home/aryan/nixos-config#aryan";
       zen = "nixGLIntel zen";
       vivaldi = "nixGLIntel vivaldi";
@@ -21,7 +22,8 @@
   };
 
   programs.bash.shellAliases = {
-    hms = "home-manager switch -b backup";
+    hm = "cd /home/aryan/nixos-config && home-manager switch --flake .#aryan -b backup";
+    hms = "cd /home/aryan/nixos-config && nh home switch --backup-extension backup";
     hmn = "home-manager news --flake /home/aryan/nixos-config#aryan";
     zen = "nixGLIntel zen";
     vivaldi = "nixGLIntel vivaldi";

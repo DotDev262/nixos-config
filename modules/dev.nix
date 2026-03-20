@@ -124,7 +124,6 @@
     '';
     shellAliases = {
       rebuild = "nh os switch";
-      hm = "nh home switch";
     };
   };
 

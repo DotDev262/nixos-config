@@ -33,7 +33,6 @@
         "zen.desktop"
         "vivaldi-stable.desktop"
         "org.gnome.Nautilus.desktop"
-        "firefox.desktop"
       ];
     };
     "org/gnome/shell/extensions/caffeine" = {
