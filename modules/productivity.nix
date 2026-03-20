@@ -6,7 +6,7 @@
     defaultSettings = {
       appearance = {
         theme = "obsidian"; # Dark mode
-        cssTheme = "Anuppuccin";
+        cssTheme = "Minimal";
         interfaceFontFamily = "Overpass";
         textFontFamily = "Rubik";
         monospaceFontFamily = "JetBrainsMono Nerd Font";

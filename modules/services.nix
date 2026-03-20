@@ -64,13 +64,16 @@
     };
   };
 
-  systemd.user.services.disable-bluetooth-on-boot = {
+  # Soft-disable Bluetooth on login (not a hard block)
+  # This makes it start "off" but ready to be toggled "on" in the UI.
+  systemd.user.services.soft-disable-bluetooth = {
     Unit = {
-      Description = "Disable Bluetooth on login";
+      Description = "Power off Bluetooth on login";
+      After = [ "network.target" ];
     };
     Service = {
       Type = "oneshot";
-      ExecStart = "${pkgs.util-linux}/bin/rfkill block bluetooth";
+      ExecStart = "${pkgs.bluez}/bin/bluetoothctl power off";
     };
     Install = {
       WantedBy = [ "default.target" ];
