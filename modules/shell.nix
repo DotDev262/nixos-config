@@ -1,6 +1,13 @@
 { config, pkgs, lib, username, homeDirectory, ... }:
 
 {
+  programs.bash = {
+    enable = true;
+    initExtra = ''
+      export XDG_DATA_DIRS="/home/aryan/.local/share:/usr/local/share:/usr/share"
+    '';
+  };
+
   programs.fish = {
     enable = true;
     shellAliases = {

@@ -5,16 +5,6 @@
 
   xdg.enable = true;
 
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      "text/html" = "zen.desktop";
-      "x-scheme-handler/http" = "zen.desktop";
-      "x-scheme-handler/https" = "zen.desktop";
-      "application/pdf" = "org.gnome.Papers.desktop";
-    };
-  };
-
   home.sessionVariables = {
     ANI_CLI_PLAYER = "mpv";
     ANI_CLI_SKIP_INTRO = "1";
@@ -22,7 +12,6 @@
     XDG_DATA_DIRS = lib.mkForce (lib.concatStringsSep ":" [
       "${homeDirectory}/.local/share"
       "${homeDirectory}/.local/state/home-manager/profiles/1/share"
-      "${homeDirectory}/.nix-profile/share"
       "/usr/local/share"
       "/usr/share"
     ]);

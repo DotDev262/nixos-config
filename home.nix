@@ -3,11 +3,12 @@
 {
   imports = [
     ./modules/core.nix
+    # ./modules/default-apps.nix
     ./modules/activation.nix
     ./modules/shell.nix
-    ./modules/productivity.nix
+    # ./modules/productivity.nix
     # ./modules/gnome.nix
-    ./modules/browsers.nix
+    # ./modules/browsers.nix
     ./modules/dev.nix
     ./modules/services.nix
     ./modules/theming.nix
