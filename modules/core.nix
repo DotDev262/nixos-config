@@ -3,8 +3,6 @@
 {
   targets.genericLinux.enable = true;
 
-  xdg.enable = true;
-
   home.sessionVariables = {
     ANI_CLI_PLAYER = "mpv";
     ANI_CLI_SKIP_INTRO = "1";
