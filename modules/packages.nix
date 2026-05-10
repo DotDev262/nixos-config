@@ -11,7 +11,7 @@
     nerd-fonts.jetbrains-mono
     overpass
     rubik
-    ente-auth
+    # ente-auth
     jq
     yq
     tree
@@ -20,28 +20,29 @@
     httpie
 
     # Academic & Productivity
-    zotero
-    onlyoffice-desktopeditors
-    papers
+    #zotero
+    #onlyoffice-desktopeditors
+    #papers
     pandoc
     marksman
     glow
     ltex-ls-plus
 
     # Media & Entertainment
-    mpv
+    #mpv
     playerctl
     yt-dlp
-    ani-cli
-    ani-skip
-    gapless
+#    ani-cli
+#    ani-skip
+    #gapless
 
     # System Monitoring & Management
     fastfetch
-    btop
-    distrobox
-    yaak
-    libnotify
+    rtk
+#    btop
+    #distrobox
+    #yaak
+#    libnotify
     nvd
   ];
 }

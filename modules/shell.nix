@@ -3,6 +3,9 @@
 {
   programs.bash = {
     enable = true;
+    profileExtra = ''
+      export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
+    '';
     initExtra = ''
       export XDG_DATA_DIRS="/home/aryan/.local/share:/usr/local/share:/usr/share"
     '';

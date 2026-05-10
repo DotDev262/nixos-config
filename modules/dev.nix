@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   programs.helix = {
     enable = true;
     settings = {
@@ -55,7 +57,7 @@
         ltex-plus.vscode-ltex-plus
       ];
       userSettings = {
-        "ltex.enabled" = [ "bibtex" "context" "latex" "markdown" "typst" ];
+        "ltex.enabled" = ["bibtex" "context" "latex" "markdown" "typst"];
         "ltex.language" = "en-US";
         "ltex.path" = "${pkgs.ltex-ls-plus}/bin/ltex-ls-plus";
         "ltex.ltex-ls.path" = "${pkgs.ltex-ls-plus}";
@@ -79,7 +81,7 @@
         };
         "ltex.hiddenFalsePositives" = {
           "en-US" = [
-             # Add specific recurring false positive IDs here
+            # Add specific recurring false positive IDs here
           ];
         };
       };
@@ -113,12 +115,6 @@
     pinentry.package = pkgs.pinentry-gnome3;
   };
 
-  programs.gh = {
-    enable = true;
-    settings = {
-      git_protocol = "ssh";
-    };
-  };
   programs.zoxide.enable = true;
 
   programs.direnv = {
@@ -158,6 +154,7 @@
   };
 
   home.packages = with pkgs; [
+    gh
     libsecret
     nil
     ripgrep

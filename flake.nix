@@ -27,9 +27,13 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    rtk-nix = {
+      url = "github:hypervideo/rtk-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, zen-browser, catppuccin, nix-vscode-extensions, agenix, nixGL, ... }: 
+  outputs = { self, nixpkgs, home-manager, zen-browser, catppuccin, nix-vscode-extensions, agenix, nixGL, rtk-nix, ... }: 
   let
     system = "x86_64-linux";
     username = "aryan";
@@ -40,7 +44,7 @@
         allowUnfree = true;
         vivaldi = { proprietaryCodecs = true; enableWideVine = true; };
       };
-      overlays = [ nix-vscode-extensions.overlays.default ];
+      overlays = [ nix-vscode-extensions.overlays.default rtk-nix.overlays.default ];
     };
   in {
     nixosConfigurations = {
