@@ -70,6 +70,7 @@
           inherit nixGL;
           inherit username homeDirectory;
           inherit agenix;
+          inherit catppuccin;
         };
         modules = [ 
           ./home.nix 
